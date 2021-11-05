@@ -17,23 +17,18 @@ function init(){
     camera.position.x = 10;
     camera.position.y = 5;
     camera.position.z = 10;
-
+    
     function updateCamera(){
         camera.updateProjectionMatrix();
     }
 
     var camGUI = gui.addFolder('Camera');
     camGUI.add(camera,'fov',0,175).name('FOV').onChange(updateCamera);
-    camGUI.add(camera,'near',0,50,0.1).name('near').onChange(updateCamera);
-    camGUI.add(camera,'far',0,50,0.1).name('far').onChange(updateCamera);
-
-    var axeHelper = new THREE.AxesHelper(1);
-    var box = getBox(1,1,1)
-    box.add(axeHelper);
-    scene.add(box);
+    camGUI.add(camera,'near',0.1,50,0.1).name('near').onChange(updateCamera);
+    camGUI.add(camera,'far',1000,5000,10).name('far').onChange(updateCamera);
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor('rgb(120,120,120)');
+    renderer.setClearColor('rgb(75,75,75)');
     document.getElementById('webgl').appendChild(renderer.domElement);
     var controls = new THREE.OrbitControls(camera,renderer.domElement);
 
@@ -41,8 +36,14 @@ function init(){
     renderer.render(scene,camera);
 }
 
-function updateCamera(camera){
-    camera.updateProjectionMatrix();
+function addMesh(number){
+    switch (number) {
+        case 1:
+            getBox(1,1,1)
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -66,6 +67,6 @@ function getBox (w,h,d){
     return mesh
 }
 
-
 init()
+
 
