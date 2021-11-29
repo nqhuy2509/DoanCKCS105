@@ -1,6 +1,6 @@
-import * as THREE from './assets/lib/three.module.js';
-// import { OrbitControls } from './assets/lib/OrbitControls.js';
-// import { TransformControls } from './assets/lib/TransformControls.js';
+import * as THREE from './js/three.module.js';
+import { OrbitControls } from './js/OrbitControls.js';
+import { TransformControls } from './js/TransformControls.js';
 
 
 var camera,scene,renderer,control,orbit;
@@ -50,24 +50,26 @@ function init(){
 
     // document.getElementById('webgl').addEventListener('mousedown', onMouseDown, false);
     document.getElementById('webgl').appendChild(renderer.domElement);
-    window.addEventListener('resize', ()=> {
-        var width = window.innerWidth
-        var height = window.innerHeight
-        renderer.setSize(width, height)
-        camera.aspect = width / height
-        camera.updateProjectionMatrix()
-        render()
+    // window.addEventListener('resize', ()=> {
+    //     var width = window.innerWidth
+    //     var height = window.innerHeight
+    //     renderer.setSize(width, height)
+    //     camera.aspect = width / height
+    //     camera.updateProjectionMatrix()
+    //     render()
+    // });
+    orbit = new OrbitControls(camera, renderer.domElement);
+    orbit.update();
+    orbit.addEventListener('change', render);
+    control = new TransformControls(camera, renderer.domElement);
+    console.log(control)
+    control.addEventListener('change', render);
+    control.addEventListener('dragging-changed', function(event) {
+        orbit.enabled = !event.value;
     });
+}
 
-    // orbit = new OrbitControls(camera,renderer.domElement);
-    // orbit.update();
-    // // orbit.addEventListener('change', render);
-    // control = new TransformControls(camera, renderer.domElement);
-    // console.log(control)
-    // control.addEventListener('change', render);
-    // // control.addEventListener('dragging-changed', function(event) {
-    // //     orbit.enabled = !event.value;
-    // // });
+function animate(){
 
 }
 
