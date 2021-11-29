@@ -1,84 +1,104 @@
-// import * as THREE from './assets/lib/three'
+import * as THREE from './assets/lib/three.module.js';
+// import { OrbitControls } from './assets/lib/OrbitControls.js';
+// import { TransformControls } from './assets/lib/TransformControls.js';
 
 
-var scene = new THREE.Scene()
-var gui = new dat.GUI();
-gui.domElement.id = 'gui';
-var renderer = new THREE.WebGLRenderer()
-var camera = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth/window.innerHeight,
-    1,
-    1000
-);
-var grid = new THREE.GridHelper(100, 100);
-scene.add(grid);
+var camera,scene,renderer,control,orbit;
+var mesh,texture,raycaster;
 
-camera.position.x = 10;
-camera.position.y = 5;
-camera.position.z = 10;
+var material = new THREE.MeshBasicMaterial({color: 0xf4efff});
+material.needsUpdate = true;
+var mouse = new THREE.Vector2();
 
-function updateCamera(){
-    camera.updateProjectionMatrix();
+// Geometry
+var BoxG = new THREE.BoxGeometry(30,30,30,40,40,40);
+var ShereG = new THREE.SphereGeometry(20,20,20);
+var ConeG = new THREE.ConeGeometry(18,30,32,20);
+var CylinderG = new THREE.CylinderGeometry(20,20,40,30,5);
+var TorusG = new THREE.TorusGeometry(20,5,20,100);
+
+init();
+render();
+
+function init(){
+
+    // Scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x343a40);
+
+    // Camera
+    var camera_x = 1;
+    var camera_y = 50;
+    var camera_z = 100;
+    camera = new THREE.PerspectiveCamera(75,
+                                window.innerWidth/innerHeight,0.1,1000);
+    camera.position.set(camera_x,camera_y,camera_z);
+    camera.lookAt(new THREE.Vector3(0,0,0));
+
+    // Grid
+    var size = 300;
+    var divisions = 50;
+    var gridHelper = new THREE.GridHelper(size,divisions, 0x888888);
+    scene.add(gridHelper);
+
+    // Renderer
+    raycaster = new THREE.Raycaster();
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setSize(window.innerWidth, innerHeight)
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
+
+    // document.getElementById('webgl').addEventListener('mousedown', onMouseDown, false);
+    document.getElementById('webgl').appendChild(renderer.domElement);
+    window.addEventListener('resize', ()=> {
+        var width = window.innerWidth
+        var height = window.innerHeight
+        renderer.setSize(width, height)
+        camera.aspect = width / height
+        camera.updateProjectionMatrix()
+        render()
+    });
+
+    // orbit = new OrbitControls(camera,renderer.domElement);
+    // orbit.update();
+    // // orbit.addEventListener('change', render);
+    // control = new TransformControls(camera, renderer.domElement);
+    // console.log(control)
+    // control.addEventListener('change', render);
+    // // control.addEventListener('dragging-changed', function(event) {
+    // //     orbit.enabled = !event.value;
+    // // });
+
 }
 
-
-
-function addMesh(number){
-    var geometry;
-    
-    var material = new THREE.MeshBasicMaterial(
-        {color: 0xffffff}
-    );
-
-    if (number ==1){
-        geometry =  new THREE.BoxGeometry(7,7,7);
-          
-    }
-
-    if (number ==2){
-        geometry = new THREE.SphereGeometry(5,100,100);
-    }
-
-    if (number ==3){
-        geometry = new THREE.ConeGeometry(4,7,100);
-    }
-
-    if (number ==4){
-        geometry =  new THREE.CylinderGeometry(4,4,7,100);
-    }
-
-    if (number==5){
-        geometry = new THREE.TorusGeometry(3, 1, 30, 100);
-    }
-
-    var mesh = new THREE.Mesh(geometry,material);
-    scene.remove(scene.children[1])
-    scene.add(mesh);
-}
-
-var camGUI = gui.addFolder('Camera');
-camGUI.add(camera,'fov',0,175).name('FOV').onChange(updateCamera);
-camGUI.add(camera,'near',0.1,50,0.1).name('near').onChange(updateCamera);
-camGUI.add(camera,'far',1000,5000,10).name('far').onChange(updateCamera);
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setClearColor('rgb(75,75,75)');
-
-document.getElementById('webgl').appendChild(renderer.domElement);
-var controls = new THREE.OrbitControls(camera,renderer.domElement);
-
-update(renderer,scene,camera,controls);
-renderer.render(scene,camera);
-
-
-
-function update(renderer, scene, camera, controls){
+function render(){
     renderer.render(scene,camera);
-    controls.update();
-    requestAnimationFrame(function(){
-        update(renderer,scene,camera,controls);
-    })
 }
+function addMesh(id){
+    mesh = scene.getObjectByName("mesh1");
+    scene.remove(mesh);
 
-
-
+    switch(id){
+        case 1:
+            mesh = new THREE.Mesh(BoxG,material);
+            break;
+        case 2:
+            mesh = new THREE.Mesh(ShereG,material);
+            break;
+        case 3:
+            mesh = new THREE.Mesh(ConeG,material);
+            break;
+        case 4:
+            mesh = new THREE.Mesh(CylinderG,material);
+            break;
+        case 5:
+            mesh = new THREE.Mesh(TorusG,material);
+            break;
+    }
+    mesh.name = "mesh1";
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    scene.add(mesh);
+    render();
+}
+window.addMesh = addMesh;
