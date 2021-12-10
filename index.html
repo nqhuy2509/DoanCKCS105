@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <title>Document</title>
 </head>
@@ -41,6 +42,16 @@
                     <li class="subitem">
                         <a href="#" onclick="addMesh(6);">Teapot</a>
                     </li>
+                    <li class="subitem">
+                        <a href="#" onclick="addMesh(7);">Icosahedron</a>
+                    </li>
+                    <li class="subitem">
+                        <a href="#" onclick="addMesh(8);">Octahedron</a>
+                    </li>
+                    <li class="subitem">
+                        <a href="#" onclick="addMesh(9);">Tetrahedron</a>
+                    </li>
+                    
                 </ul>
             </li>
             <li class="item">
@@ -72,14 +83,12 @@
                     </li>
                 </ul>
             </li>
-            <li class="item">
+            <li class="item animation-list">
                 <a href="#">Animation</a>
                 <ul class="subnav anims">
-                    <li class="subitem"><a href="#"></a></li>
-                    <li class="subitem"><a href="#"></a></li>
-                    <li class="subitem"><a href="#"></a></li>
-                    <li class="subitem"><a href="#"></a></li>
-                    <li class="subitem"><a href="#"></a></li>
+                    <li class="subitem"><a href="#" onclick="Animation1()">Rotate & move </a></li>
+                    <li class="subitem"><a href="#" onclick="Animation2()">Up & down</a></li>
+                    <li class="subitem"><a href="#" onclick="RemoveAllAnimation()">Reset</a></li>
                 </ul>
             </li>
         </ul>
@@ -87,15 +96,71 @@
 
     
     <div id="webgl"></div>
-    <!-- <script src="./assets/lib/three.module.js"></script>
-    <script src="./assets/lib/OrbitControls.js"></script>
-    <script src="./assets/lib/dat.gui.min.js"></script>   -->
-    <script type="module" src="./main.js"></script>
-
+    <div class="button-affine">
+        <div class="item-btn" onclick="Translate()">
+            <i class="fas fa-arrows-alt"></i>
+        </div>
+        <div class="item-btn" onclick="Rotate()">
+            <i class="fas fa-sync-alt"></i>
+        </div>
+        <div class="item-btn" onclick="Scale()">
+            <i class="fas fa-expand-arrows-alt"></i>
+        </div>
+    </div>
+    <div class="ctrlpannel">
+            <div class="card-header">Control Panel</div>
+            <div class="card-body">
+                <div class="card-item">
+                    <span class="valueSpanFOV">Field of view: 75</span>
+                    <input type="range" class="custom-range" id="customFOV" min="0" max="180" value="75">
+                </div>
+                
+                <div class="card-item">
+                    <span class="valueSpanNear">Near: 0.1</span>
+                    <input type="range" class="custom-range" id="customNear" min="0.1" max="100" value="0.1">
+                </div>
+                
+                <div class="card-item">
+                    <span class="valueSpanFar">Far: 1000</span>
+                    <input type="range" class="custom-range" id="customFar" min="200" max="2000" value="1000">
+                </div>
+        </div>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script>
+        $(document).ready(function() {
+            const $valueSpanFOV = $('.valueSpanFOV');
+            const $valueSpanNear = $('.valueSpanNear');
+            const $valueSpanFar = $('.valueSpanFar');
+
+            const $valueFOV = $('#customFOV');
+            const $valueNear = $('#customNear');
+            const $valueFar = $('#customFar');
+
+            $valueSpanFOV.html("Field of view: " + $valueFOV.val());
+            $valueFOV.on('input change', () => {
+                $valueSpanFOV.html("Field of view: " + $valueFOV.val());
+                setFOV($valueFOV.val());
+            });
+
+            $valueSpanNear.html("Near: " + $valueNear.val());
+            $valueNear.on('input change', () => {
+                $valueSpanNear.html("Near: " + $valueNear.val());
+                setNear($valueNear.val());
+            });
+
+            $valueSpanFar.html("Far: " + $valueFar.val());
+            $valueFar.on('input change', () => {
+                $valueSpanFar.html("Far: " + $valueFar.val());
+                setFar($valueFar.val());
+            });
+        });
+
         function Uploadimage() {
             document.getElementById("texture").click();
         };
     </script>
 </body>
+<script type="module" src="./main.js"></script>
 </html>

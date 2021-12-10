@@ -20,6 +20,9 @@ var ConeG = new THREE.ConeGeometry(18,30,32,20);
 var CylinderG = new THREE.CylinderGeometry(20,20,40,30,5);
 var TorusG = new THREE.TorusGeometry(20,5,20,100);
 var TeapotG = new TeapotBufferGeometry(20, 8);
+var IcosahedronG = new THREE.IcosahedronBufferGeometry(25);
+var OctahedronG = new THREE.OctahedronBufferGeometry(25);
+var TetrahedronG = new THREE.TetrahedronBufferGeometry(25);
 
 init();
 render();
@@ -152,6 +155,15 @@ function addMesh(id){
             break;
         case 6:
             mesh = new THREE.Mesh(TeapotG, material);
+            break;
+        case 7:
+            mesh = new THREE.Mesh(IcosahedronG,material);
+            break;
+        case 8:
+            mesh = new THREE.Mesh(OctahedronG,material);
+            break;
+        case 9:
+            mesh = new THREE.Mesh(TetrahedronG,material);
             break;
     }
     mesh.name = "mesh1";
@@ -316,3 +328,77 @@ function SetTexture(url) {
     }
 }
 window.SetTexture = SetTexture;
+
+
+
+var mesh = new THREE.Mesh();
+var id_animation1, id_animation2;
+
+const position_x = mesh.position.x;
+const position_y = mesh.position.y;
+var kt = 0;
+
+function Animation1() {
+    cancelAnimationFrame(id_animation2);
+    cancelAnimationFrame(id_animation1);
+    var positionx = mesh.position.x;
+    var positiony = mesh.position.y;
+    if (positiony < position_y + 30 && kt == 0) {
+        mesh.position.y += 0.3;
+    }
+    if (positiony > position_y + 30 && positionx < position_x + 30) {
+        mesh.position.x += 0.3;
+    }
+    if (positiony > position_y + 30 && positionx > position_x + 30) kt += 1;
+    if (kt > 1 && positiony > position_y) {
+        mesh.position.y -= 0.3;
+    }
+    if (kt > 1 && positiony < position_y && positionx > position_x) {
+        mesh.position.x -= 0.3;
+    }
+    if (positiony < position_y && positionx < position_x) kt = 0;
+    mesh.rotation.y += 0.01;
+    render();
+    id_animation1 = requestAnimationFrame(Animation1);
+}
+window.Animation1 = Animation1;
+
+var kt2 = 0;
+
+function Animation2() {
+    cancelAnimationFrame(id_animation1);
+    cancelAnimationFrame(id_animation2);
+    var positiony = mesh.position.y;
+    if (positiony < position_y + 30 && kt2 == 0) {
+        mesh.position.y += 0.3;
+        mesh.rotation.y += 0.05;
+    }
+    if (positiony > position_y + 30) kt2 += 1;
+    if (kt2 > 1 && positiony > position_y) {
+        mesh.position.y -= 0.3;
+        mesh.rotation.y += 0.05;
+    }
+    if (positiony < position_y) kt2 = 0;
+    render();
+    id_animation2 = requestAnimationFrame(Animation2);
+}
+window.Animation2 = Animation2;
+
+
+function RemoveAnimation1() {
+    cancelAnimationFrame(id_animation1);
+}
+window.RemoveAnimation1 = RemoveAnimation1;
+
+function RemoveAnimation2() {
+    cancelAnimationFrame(id_animation2);
+}
+window.RemoveAnimation2 = RemoveAnimation2;
+
+function RemoveAllAnimation() {
+    cancelAnimationFrame(id_animation1);
+    cancelAnimationFrame(id_animation2);
+    mesh.rotation.set(0, 0, 0);
+    render();
+}
+window.RemoveAllAnimation = RemoveAllAnimation;
