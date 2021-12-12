@@ -133,6 +133,8 @@ function SetMaterial(mat){
 }
 window.SetMaterial = SetMaterial
 
+// Add Mesh into screen
+
 function addMesh(id){
     mesh = scene.getObjectByName("mesh1");
     scene.remove(mesh);
@@ -175,6 +177,8 @@ function addMesh(id){
 }
 window.addMesh = addMesh;
 
+// set FOV, Far, near
+
 function setFOV(value) {
     camera.fov = Number(value);
     camera.updateProjectionMatrix();
@@ -196,6 +200,7 @@ function setNear(value) {
 }
 window.setNear = setNear;
 
+// Affine
 function Translate() {
     control.setMode("translate");
 }
@@ -244,6 +249,8 @@ function control_transform(mesh) {
         }
     });
 }
+
+// Set light
 
 function SetPointLight() {
     light = scene.getObjectByName("pl1");
@@ -318,6 +325,8 @@ function onMouseDown(event) {
     if (check_obj == 0 && control.dragging == 0) control.detach();
     render();
 }
+
+
 
 function SetTexture(url) {
     mesh = scene.getObjectByName("mesh1");
