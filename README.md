@@ -28,3 +28,6 @@
     - B4: Mở trình duyệt và thao tác trên trình duyệt
 
 * **Link github repository:** [link](https://github.com/nqhuy2509/DoanCKCS105)
+* **Link video demo:** [link](https://drive.google.com/file/d/1VAK-DcYg8tf7gHbkm1B6zGgsYWm7zYZA/view?usp=sharing)
+
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;`Copyright © Nguyễn Quan Huy`
